@@ -8,6 +8,7 @@ import Ligue from "./pages/Ligue";
 import Troc from "./pages/Troc";
 import Dons from "./pages/Dons";
 import Profil from "./pages/Profil";
+import Forfaits from "./pages/Forfaits";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/troc" element={<Troc />} />
           <Route path="/dons" element={<Dons />} />
           <Route path="/profil" element={<Profil />} />
+          <Route path="/forfaits" element={<Forfaits />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

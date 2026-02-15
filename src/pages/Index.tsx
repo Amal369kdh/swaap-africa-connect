@@ -6,10 +6,11 @@ import RadarProximite from "@/components/RadarProximite";
 import DonsSolidarite from "@/components/DonsSolidarite";
 import ProgressionUser from "@/components/ProgressionUser";
 import PassMatchBoost from "@/components/PassMatchBoost";
+import BottomNav from "@/components/BottomNav";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background african-pattern-bg">
+    <div className="min-h-screen bg-background african-pattern-bg pb-20 md:pb-6">
       <Header />
 
       <main className="container px-4 py-6 space-y-6">
@@ -42,6 +43,9 @@ const Index = () => {
           </div>
         </div>
       </main>
+
+      {/* Mobile bottom navigation */}
+      <BottomNav />
     </div>
   );
 };

@@ -1,35 +1,91 @@
-import { Flame, ArrowRight, Repeat, Heart, Users, TrendingUp, Eye } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
+import { Flame, ArrowRight, Repeat, Heart, Users, TrendingUp, Eye, MapPin, Sparkles } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "@/contexts/UserContext";
+import { MASK_GRADES } from "@/lib/masks";
+import MaskAvatar from "@/components/MaskAvatar";
 import swaapLogo from "@/assets/swaap-logo.jpeg";
 
 const empires = [
-  { name: "Empire du Mali", lit: true },
-  { name: "Empire Songhaï", lit: true },
-  { name: "Royaume Ashanti", lit: false },
-  { name: "Empire du Ghana", lit: false },
-  { name: "Royaume du Kongo", lit: false },
+  { name: "Empire du Mali", flag: "🇲🇱", lit: true, score: 10452, color: "from-primary to-swaap-gold" },
+  { name: "Empire Songhaï", flag: "🇳🇪", lit: true, score: 8890, color: "from-secondary to-primary" },
+  { name: "Royaume Ashanti", flag: "🇬🇭", lit: false, score: 0, color: "" },
+  { name: "Empire du Ghana", flag: "🇬🇭", lit: false, score: 0, color: "" },
+  { name: "Royaume du Kongo", flag: "🇨🇬", lit: false, score: 0, color: "" },
 ];
 
 const previewItems = [
-  { type: "troc", label: "iPhone 12 contre Samsung A54", city: "Abidjan", time: "Il y a 5 min" },
-  { type: "troc", label: "Vélo VTT contre tablette", city: "Dakar", time: "Il y a 12 min" },
-  { type: "don", label: "Livres scolaires (lot de 15)", city: "Bamako", time: "Il y a 20 min" },
+  { type: "troc", label: "iPhone 12 contre Samsung A54", city: "Abidjan", time: "Il y a 5 min", mask: 0 },
+  { type: "troc", label: "Vélo VTT contre tablette", city: "Dakar", time: "Il y a 12 min", mask: 1 },
+  { type: "don", label: "Livres scolaires (lot de 15)", city: "Bamako", time: "Il y a 20 min", mask: 2 },
 ];
+
+// Animated counter hook
+const useAnimatedCounter = (target: number, duration = 2000) => {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  const started = useRef(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !started.current) {
+          started.current = true;
+          const startTime = Date.now();
+          const tick = () => {
+            const elapsed = Date.now() - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            setCount(Math.floor(eased * target));
+            if (progress < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        }
+      },
+      { threshold: 0.3 }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [target, duration]);
+
+  return { count, ref };
+};
 
 const Landing = () => {
   const { isConnected } = useUser();
   const navigate = useNavigate();
+  const [flameIntensity, setFlameIntensity] = useState(0);
+  const [selectedEmpire, setSelectedEmpire] = useState<number | null>(null);
 
-  // If already connected, redirect to dashboard
+  // Animated counters
+  const members = useAnimatedCounter(1247);
+  const trocs = useAnimatedCounter(3892);
+  const dons = useAnimatedCounter(1156);
+  const score = useAnimatedCounter(42500);
+
+  // Flame animation
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFlameIntensity((prev) => (prev + 1) % 3);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
   if (isConnected) {
     navigate("/dashboard");
     return null;
   }
 
+  const flameSizes = ["h-12 w-12", "h-14 w-14", "h-16 w-16"];
+  const flameGlows = [
+    "shadow-[0_0_20px_hsl(28_100%_55%/0.3)]",
+    "shadow-[0_0_40px_hsl(28_100%_55%/0.5),0_0_80px_hsl(28_100%_55%/0.2)]",
+    "shadow-[0_0_60px_hsl(28_100%_55%/0.6),0_0_120px_hsl(270_80%_55%/0.2)]",
+  ];
+
   return (
     <div className="min-h-screen bg-background african-pattern-bg">
-      {/* Header minimal */}
+      {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-xl">
         <div className="container flex h-14 items-center justify-between px-4">
           <div className="flex items-center gap-2">
@@ -54,10 +110,24 @@ const Landing = () => {
       </header>
 
       <main className="container px-4 py-8 space-y-8">
-        {/* Hero with collective flame */}
+        {/* Hero with animated collective flame */}
         <section className="text-center space-y-4 animate-fade-in">
-          <div className="mx-auto w-24 h-24 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center glow-orange">
-            <Flame className="h-12 w-12 text-primary animate-pulse-glow" />
+          <div className={`mx-auto w-28 h-28 rounded-full bg-gradient-to-br from-primary/20 via-secondary/10 to-swaap-gold/20 flex items-center justify-center transition-all duration-1000 ${flameGlows[flameIntensity]}`}>
+            <div className="relative">
+              <Flame className={`${flameSizes[flameIntensity]} text-primary transition-all duration-1000`} />
+              {/* Particle sparks */}
+              {[0, 1, 2].map((i) => (
+                <Sparkles
+                  key={i}
+                  className="absolute text-swaap-gold/60 h-3 w-3 animate-pulse-glow"
+                  style={{
+                    top: `${-8 + i * 4}px`,
+                    left: `${-4 + i * 12}px`,
+                    animationDelay: `${i * 0.6}s`,
+                  }}
+                />
+              ))}
+            </div>
           </div>
           <h1 className="font-display text-xl md:text-3xl font-bold text-gradient-swaap leading-tight">
             La flamme africaine
@@ -66,6 +136,9 @@ const Landing = () => {
           </h1>
           <p className="text-sm text-muted-foreground max-w-md mx-auto">
             Échange, donne, progresse. Rejoins la communauté qui construit l'avenir ensemble.
+          </p>
+          <p className="text-[10px] text-muted-foreground/60 animate-pulse-glow">
+            🔥 La flamme grandit avec chaque nouveau membre
           </p>
           <Link
             to="/forfaits"
@@ -76,48 +149,112 @@ const Landing = () => {
           </Link>
         </section>
 
-        {/* Live stats */}
+        {/* Animated live stats */}
         <section className="grid grid-cols-2 md:grid-cols-4 gap-3 animate-fade-in" style={{ animationDelay: "0.2s", opacity: 0 }}>
           {[
-            { icon: Users, label: "Membres actifs", value: "1 247" },
-            { icon: Repeat, label: "Trocs réalisés", value: "3 892" },
-            { icon: Heart, label: "Dons collectés", value: "1 156" },
-            { icon: TrendingUp, label: "Score collectif", value: "42 500" },
+            { icon: Users, label: "Membres actifs", value: members.count, ref: members.ref, suffix: "" },
+            { icon: Repeat, label: "Trocs réalisés", value: trocs.count, ref: trocs.ref, suffix: "" },
+            { icon: Heart, label: "Dons collectés", value: dons.count, ref: dons.ref, suffix: "" },
+            { icon: TrendingUp, label: "Score collectif", value: score.count, ref: score.ref, suffix: "" },
           ].map((stat) => (
-            <div key={stat.label} className="rounded-lg bg-card border border-border p-3 text-center">
-              <stat.icon className="h-5 w-5 text-primary mx-auto mb-1" />
-              <p className="font-display text-lg font-bold text-foreground">{stat.value}</p>
+            <div key={stat.label} ref={stat.ref} className="rounded-lg bg-card border border-border p-3 text-center hover:border-primary/30 transition-colors group">
+              <stat.icon className="h-5 w-5 text-primary mx-auto mb-1 group-hover:scale-110 transition-transform" />
+              <p className="font-display text-lg font-bold text-foreground">
+                {stat.value.toLocaleString()}{stat.suffix}
+              </p>
               <p className="text-[10px] text-muted-foreground">{stat.label}</p>
             </div>
           ))}
         </section>
 
-        {/* Empires (partially lit) */}
+        {/* Interactive empires */}
         <section className="rounded-lg bg-card border border-border p-4 animate-fade-in" style={{ animationDelay: "0.3s", opacity: 0 }}>
-          <h2 className="font-display text-sm font-bold tracking-wide mb-3 text-center">
+          <h2 className="font-display text-sm font-bold tracking-wide mb-1 text-center">
             Empires Historiques
           </h2>
-          <div className="flex justify-center gap-3 flex-wrap">
-            {empires.map((empire) => (
-              <div
+          <p className="text-[10px] text-muted-foreground text-center mb-4">
+            Touche un empire pour voir sa progression
+          </p>
+          <div className="flex justify-center gap-2 flex-wrap">
+            {empires.map((empire, i) => (
+              <button
                 key={empire.name}
-                className={`rounded-md px-3 py-2 text-xs font-medium text-center transition-all ${
+                onClick={() => setSelectedEmpire(selectedEmpire === i ? null : i)}
+                className={`rounded-lg px-3 py-2 text-xs font-medium text-center transition-all duration-300 border ${
                   empire.lit
-                    ? "bg-primary/15 text-primary border border-primary/30"
-                    : "bg-muted/30 text-muted-foreground/40 border border-border/30"
+                    ? selectedEmpire === i
+                      ? "bg-primary/25 text-primary border-primary/50 scale-105 glow-orange"
+                      : "bg-primary/10 text-primary border-primary/30 hover:bg-primary/20"
+                    : "bg-muted/20 text-muted-foreground/40 border-border/30 cursor-default"
                 }`}
               >
+                <span className="text-base mr-1">{empire.flag}</span>
                 {empire.name}
                 {empire.lit && <Flame className="h-3 w-3 inline ml-1" />}
-              </div>
+              </button>
             ))}
           </div>
+
+          {/* Expanded empire detail */}
+          {selectedEmpire !== null && empires[selectedEmpire].lit && (
+            <div className="mt-4 rounded-lg bg-muted/30 p-4 animate-fade-in border border-border/50">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">{empires[selectedEmpire].flag}</span>
+                  <div>
+                    <p className="font-display text-xs font-bold">{empires[selectedEmpire].name}</p>
+                    <p className="text-[10px] text-muted-foreground">Empire actif</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="font-display text-sm font-bold text-primary">{empires[selectedEmpire].score.toLocaleString()}</p>
+                  <p className="text-[10px] text-muted-foreground">points</p>
+                </div>
+              </div>
+              <div className="h-2 rounded-full bg-muted overflow-hidden">
+                <div
+                  className={`h-full rounded-full bg-gradient-to-r ${empires[selectedEmpire].color} transition-all duration-1000`}
+                  style={{ width: `${Math.min(100, (empires[selectedEmpire].score / 12000) * 100)}%` }}
+                />
+              </div>
+              <p className="mt-1 text-[10px] text-muted-foreground">
+                Prochain niveau : 12 000 points
+              </p>
+            </div>
+          )}
+
           <p className="text-[10px] text-muted-foreground text-center mt-3">
-            Les empires s'illuminent avec la progression collective de la communauté
+            Les empires s'illuminent avec la progression collective
           </p>
         </section>
 
-        {/* Preview of trocs/dons (read-only) */}
+        {/* Mask grades preview */}
+        <section className="rounded-lg bg-card border border-border p-4 animate-fade-in" style={{ animationDelay: "0.35s", opacity: 0 }}>
+          <h2 className="font-display text-sm font-bold tracking-wide mb-1 text-center">
+            Grades & Masques
+          </h2>
+          <p className="text-[10px] text-muted-foreground text-center mb-4">
+            Débloque des masques historiques selon ton niveau
+          </p>
+          <div className="flex justify-center gap-6">
+            {MASK_GRADES.map((mask) => (
+              <MaskAvatar key={mask.id} mask={mask} size="lg" showLabel />
+            ))}
+          </div>
+          <div className="mt-4 flex justify-center gap-2">
+            {["Gratuit", "Standard", "Premium"].map((label, i) => (
+              <span key={label} className={`text-[9px] rounded-full px-2 py-0.5 ${
+                i === 0 ? "bg-muted text-muted-foreground"
+                : i === 1 ? "bg-primary/10 text-primary"
+                : "bg-swaap-gold/10 text-swaap-gold"
+              }`}>
+                {label}
+              </span>
+            ))}
+          </div>
+        </section>
+
+        {/* Preview of trocs/dons with mask avatars */}
         <section className="rounded-lg bg-card border border-border p-4 animate-fade-in" style={{ animationDelay: "0.4s", opacity: 0 }}>
           <div className="flex items-center justify-between mb-3">
             <h2 className="font-display text-sm font-bold tracking-wide flex items-center gap-2">
@@ -132,20 +269,24 @@ const Landing = () => {
             {previewItems.map((item) => (
               <div
                 key={item.label}
-                className="flex items-center gap-3 rounded-md bg-muted/30 px-3 py-2.5"
+                className="flex items-center gap-3 rounded-md bg-muted/30 px-3 py-2.5 hover:bg-muted/50 transition-colors"
               >
-                <div className={`h-8 w-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                <MaskAvatar mask={MASK_GRADES[item.mask]} size="sm" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium truncate">{item.label}</p>
+                  <p className="text-[10px] text-muted-foreground flex items-center gap-1">
+                    <MapPin className="h-2.5 w-2.5" />
+                    {item.city} · {item.time}
+                  </p>
+                </div>
+                <div className={`h-6 w-6 rounded-full flex items-center justify-center flex-shrink-0 ${
                   item.type === "troc" ? "bg-primary/15" : "bg-secondary/15"
                 }`}>
                   {item.type === "troc" ? (
-                    <Repeat className="h-4 w-4 text-primary" />
+                    <Repeat className="h-3 w-3 text-primary" />
                   ) : (
-                    <Heart className="h-4 w-4 text-secondary" />
+                    <Heart className="h-3 w-3 text-secondary" />
                   )}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium truncate">{item.label}</p>
-                  <p className="text-[10px] text-muted-foreground">{item.city} · {item.time}</p>
                 </div>
               </div>
             ))}

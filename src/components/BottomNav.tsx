@@ -2,7 +2,7 @@ import { Home, Repeat, Heart, Trophy, User } from "lucide-react";
 import { useLocation, Link } from "react-router-dom";
 
 const navItems = [
-  { icon: Home, label: "Accueil", path: "/" },
+  { icon: Home, label: "Accueil", path: "/dashboard" },
   { icon: Repeat, label: "Troc", path: "/troc" },
   { icon: Heart, label: "Dons", path: "/dons" },
   { icon: Trophy, label: "Ligue", path: "/ligue" },

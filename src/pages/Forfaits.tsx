@@ -1,5 +1,6 @@
 import { Check, X, Flame, Zap, Crown, Star, ArrowLeft } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useUser, type UserPlan } from "@/contexts/UserContext";
 import BottomNav from "@/components/BottomNav";
 
 interface Feature {
@@ -31,12 +32,20 @@ const FeatureValue = ({ value }: { value: boolean | string }) => {
 };
 
 const Forfaits = () => {
+  const { login, isConnected } = useUser();
+  const navigate = useNavigate();
+
+  const handleChoose = (plan: UserPlan) => {
+    login(plan);
+    navigate("/dashboard");
+  };
+
   return (
     <div className="min-h-screen bg-background african-pattern-bg pb-20 md:pb-6">
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-xl">
         <div className="container flex h-14 items-center gap-3 px-4">
-          <Link to="/" className="rounded-full bg-muted p-2 hover:bg-muted/80 transition-colors">
+          <Link to={isConnected ? "/dashboard" : "/"} className="rounded-full bg-muted p-2 hover:bg-muted/80 transition-colors">
             <ArrowLeft className="h-4 w-4 text-foreground" />
           </Link>
           <h1 className="font-display text-sm font-bold tracking-wide">Choisir un Forfait</h1>
@@ -86,7 +95,10 @@ const Forfaits = () => {
                 <span>Pas de progression</span>
               </li>
             </ul>
-            <button className="w-full rounded-md border border-border bg-muted py-2.5 text-sm font-semibold text-foreground hover:bg-muted/80 transition-colors">
+            <button
+              onClick={() => handleChoose("gratuit")}
+              className="w-full rounded-md border border-border bg-muted py-2.5 text-sm font-semibold text-foreground hover:bg-muted/80 transition-colors"
+            >
               Commencer
             </button>
           </div>
@@ -124,14 +136,16 @@ const Forfaits = () => {
                 <span>Boosts plus chers</span>
               </li>
             </ul>
-            <button className="w-full rounded-md bg-primary py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors">
+            <button
+              onClick={() => handleChoose("standard")}
+              className="w-full rounded-md bg-primary py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
+            >
               Choisir Standard
             </button>
           </div>
 
           {/* Premium 1000 FCFA */}
           <div className="rounded-lg bg-card p-5 flex flex-col relative overflow-hidden border border-swaap-gold/30">
-            {/* Badge populaire */}
             <div className="absolute top-0 right-0 bg-swaap-gold text-primary-foreground text-[10px] font-bold px-3 py-1 rounded-bl-lg">
               POPULAIRE
             </div>
@@ -166,7 +180,10 @@ const Forfaits = () => {
                 <span>Progression accélérée</span>
               </li>
             </ul>
-            <button className="w-full rounded-md bg-gradient-to-r from-swaap-gold to-primary py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity glow-orange">
+            <button
+              onClick={() => handleChoose("premium")}
+              className="w-full rounded-md bg-gradient-to-r from-swaap-gold to-primary py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity glow-orange"
+            >
               Choisir Premium
             </button>
           </div>
@@ -226,7 +243,7 @@ const Forfaits = () => {
         </div>
       </main>
 
-      <BottomNav />
+      {isConnected && <BottomNav />}
     </div>
   );
 };

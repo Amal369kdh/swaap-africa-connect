@@ -1,7 +1,8 @@
 import Header from "@/components/Header";
 import BottomNav from "@/components/BottomNav";
-import { Shield, Star, Award, Crown, Zap, Coins, Settings, ChevronRight } from "lucide-react";
-import swaapLogo from "@/assets/swaap-logo.jpeg";
+import { useUser } from "@/contexts/UserContext";
+import { Shield, Star, Award, Crown, Zap, Coins, Settings, ChevronRight, LogOut } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 
 const badges = [
   { icon: Shield, label: "Débutant", unlocked: true },
@@ -17,14 +18,17 @@ const stats = [
   { label: "Rang national", value: "#142" },
 ];
 
-const menuItems = [
-  { label: "Mes Annonces", icon: ChevronRight },
-  { label: "Historique Crédits", icon: ChevronRight },
-  { label: "Sécurité & Vérification", icon: ChevronRight },
-  { label: "Paramètres", icon: Settings },
-];
-
 const Profil = () => {
+  const { plan, credits, logout } = useUser();
+  const navigate = useNavigate();
+
+  const planLabel = plan === "premium" ? "Premium · 1000 FCFA" : plan === "standard" ? "Standard · 600 FCFA" : "Gratuit";
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
+
   return (
     <div className="min-h-screen bg-background african-pattern-bg pb-20 md:pb-6">
       <Header />
@@ -43,6 +47,28 @@ const Profil = () => {
             Élite Troqueur · Niv. 12
           </div>
         </section>
+
+        {/* Plan info */}
+        <div className="rounded-lg bg-card p-4 gradient-border animate-fade-in" style={{ animationDelay: "0.1s", opacity: 0 }}>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs text-muted-foreground">Mon forfait</p>
+              <p className="font-display text-sm font-bold text-foreground">{planLabel}</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="text-right">
+                <p className="text-xs text-muted-foreground">Crédits</p>
+                <p className="font-display text-sm font-bold text-swaap-gold">{credits}</p>
+              </div>
+              <Link
+                to="/forfaits"
+                className="rounded-md bg-primary/15 px-3 py-1.5 text-xs font-semibold text-primary hover:bg-primary/25 transition-colors"
+              >
+                Changer
+              </Link>
+            </div>
+          </div>
+        </div>
 
         {/* XP Progress */}
         <div className="rounded-lg bg-card p-4 gradient-border animate-fade-in" style={{ animationDelay: "0.15s", opacity: 0 }}>
@@ -90,24 +116,40 @@ const Profil = () => {
             </div>
             <div className="flex-1 flex items-center justify-center gap-1.5 rounded-md bg-muted/50 py-2 text-xs">
               <Coins className="h-3.5 w-3.5 text-swaap-gold" />
-              <span className="font-medium">450 Crédits</span>
+              <span className="font-medium">{credits} Crédits</span>
             </div>
           </div>
         </div>
 
         {/* Menu */}
         <div className="rounded-lg bg-card gradient-border overflow-hidden animate-fade-in" style={{ animationDelay: "0.45s", opacity: 0 }}>
-          {menuItems.map((item, i) => (
-            <button
-              key={item.label}
-              className={`flex w-full items-center justify-between px-4 py-3.5 text-sm hover:bg-muted transition-colors ${
-                i < menuItems.length - 1 ? "border-b border-border/50" : ""
-              }`}
-            >
-              <span>{item.label}</span>
-              <item.icon className="h-4 w-4 text-muted-foreground" />
-            </button>
-          ))}
+          <Link to="/forfaits" className="flex w-full items-center justify-between px-4 py-3.5 text-sm hover:bg-muted transition-colors border-b border-border/50">
+            <span>Gérer mon forfait</span>
+            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+          </Link>
+          <button className="flex w-full items-center justify-between px-4 py-3.5 text-sm hover:bg-muted transition-colors border-b border-border/50">
+            <span>Mes Annonces</span>
+            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+          </button>
+          <button className="flex w-full items-center justify-between px-4 py-3.5 text-sm hover:bg-muted transition-colors border-b border-border/50">
+            <span>Historique Crédits</span>
+            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+          </button>
+          <button className="flex w-full items-center justify-between px-4 py-3.5 text-sm hover:bg-muted transition-colors border-b border-border/50">
+            <span>Sécurité & Vérification</span>
+            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+          </button>
+          <button className="flex w-full items-center justify-between px-4 py-3.5 text-sm hover:bg-muted transition-colors border-b border-border/50">
+            <span>Paramètres</span>
+            <Settings className="h-4 w-4 text-muted-foreground" />
+          </button>
+          <button
+            onClick={handleLogout}
+            className="flex w-full items-center justify-between px-4 py-3.5 text-sm hover:bg-destructive/10 transition-colors text-destructive"
+          >
+            <span>Se déconnecter</span>
+            <LogOut className="h-4 w-4" />
+          </button>
         </div>
       </main>
       <BottomNav />

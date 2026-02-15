@@ -1,6 +1,8 @@
 import swaapLogo from "@/assets/swaap-logo.jpeg";
-import { Bell, Flame, Coins, Crown, Zap, LogOut } from "lucide-react";
+import { Bell, Flame, Coins, Crown, Zap, LogOut, MapPin } from "lucide-react";
 import { useUser } from "@/contexts/UserContext";
+import { getMaskForPlan } from "@/lib/masks";
+import MaskAvatar from "@/components/MaskAvatar";
 import { Link, useNavigate } from "react-router-dom";
 
 const planLabels = {
@@ -17,10 +19,15 @@ const planIcons = {
   premium: Crown,
 };
 
-const Header = () => {
+interface HeaderProps {
+  geo?: { country: string | null; flag: string | null; loading: boolean; denied: boolean };
+}
+
+const Header = ({ geo }: HeaderProps) => {
   const { plan, credits, isConnected, logout } = useUser();
   const navigate = useNavigate();
   const PlanIcon = planIcons[plan];
+  const mask = getMaskForPlan(plan);
 
   const handleLogout = () => {
     logout();
@@ -30,17 +37,25 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-xl">
       <div className="container flex h-16 items-center justify-between px-4">
-        {/* Logo */}
-        <Link to={isConnected ? "/dashboard" : "/"} className="flex items-center gap-3">
-          <img src={swaapLogo} alt="Swaap" className="h-10 w-10 rounded-full object-cover" />
-          <span className="font-display text-lg font-bold text-gradient-swaap hidden sm:inline">
-            SWAAP
-          </span>
-        </Link>
+        {/* Logo + Geo */}
+        <div className="flex items-center gap-3">
+          <Link to={isConnected ? "/dashboard" : "/"} className="flex items-center gap-2">
+            <img src={swaapLogo} alt="Swaap" className="h-10 w-10 rounded-full object-cover" />
+            <span className="font-display text-lg font-bold text-gradient-swaap hidden sm:inline">
+              SWAAP
+            </span>
+          </Link>
+          {/* Country indicator */}
+          {geo && !geo.loading && geo.country && (
+            <div className="flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-[10px] text-muted-foreground">
+              <MapPin className="h-3 w-3 text-primary" />
+              <span>{geo.flag} {geo.country}</span>
+            </div>
+          )}
+        </div>
 
         {/* Stats bar */}
         <div className="flex items-center gap-3 text-sm">
-          {/* Plan badge */}
           {plan !== "none" && plan !== "gratuit" && (
             <div className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 ${
               plan === "premium"
@@ -76,9 +91,8 @@ const Header = () => {
           >
             <LogOut className="h-4 w-4 text-muted-foreground" />
           </button>
-          <div className="h-9 w-9 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-sm font-bold text-primary-foreground">
-            S
-          </div>
+          {/* Mask avatar instead of generic circle */}
+          <MaskAvatar mask={mask} size="sm" />
         </div>
       </div>
     </header>

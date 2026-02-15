@@ -1,9 +1,11 @@
 import { Trophy, ChevronRight } from "lucide-react";
+import { MASK_GRADES } from "@/lib/masks";
+import MaskAvatar from "@/components/MaskAvatar";
 
 const countries = [
-  { name: "Côte d'Ivoire", flag: "🇨🇮", score: 10452 },
-  { name: "Sénégal", flag: "🇸🇳", score: 8890 },
-  { name: "Mali", flag: "🇲🇱", score: 7525 },
+  { name: "Côte d'Ivoire", flag: "🇨🇮", score: 10452, topMask: 2 },
+  { name: "Sénégal", flag: "🇸🇳", score: 8890, topMask: 1 },
+  { name: "Mali", flag: "🇲🇱", score: 7525, topMask: 0 },
 ];
 
 const LigueDesNations = () => {
@@ -24,6 +26,7 @@ const LigueDesNations = () => {
               <span className="text-sm font-bold text-muted-foreground w-5">{i + 1}.</span>
               <span className="text-lg">{country.flag}</span>
               <span className="text-sm font-medium">{country.name}</span>
+              <MaskAvatar mask={MASK_GRADES[country.topMask]} size="sm" />
             </div>
             <div className="flex items-center gap-1.5">
               <Trophy className="h-3.5 w-3.5 text-swaap-gold" />

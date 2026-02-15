@@ -7,11 +7,18 @@ import DonsSolidarite from "@/components/DonsSolidarite";
 import ProgressionUser from "@/components/ProgressionUser";
 import PassMatchBoost from "@/components/PassMatchBoost";
 import BottomNav from "@/components/BottomNav";
+import GeoAlert from "@/components/GeoAlert";
+import { useGeolocation } from "@/hooks/useGeolocation";
 
 const Index = () => {
+  const geo = useGeolocation();
+
   return (
     <div className="min-h-screen bg-background african-pattern-bg pb-20 md:pb-6">
-      <Header />
+      <Header geo={geo} />
+
+      {/* Geo alert if denied */}
+      {geo.denied && <GeoAlert />}
 
       <main className="container px-4 py-6 space-y-6">
         {/* Animated central logo */}
@@ -44,7 +51,6 @@ const Index = () => {
         </div>
       </main>
 
-      {/* Mobile bottom navigation */}
       <BottomNav />
     </div>
   );

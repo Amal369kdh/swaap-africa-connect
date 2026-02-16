@@ -67,7 +67,7 @@ const Forfaits = () => {
         {/* Pricing cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-fade-in" style={{ animationDelay: "0.2s", opacity: 0 }}>
           {/* Gratuit */}
-          <div className="rounded-lg bg-card border border-border p-5 flex flex-col">
+          <div className="rounded-lg bg-card border border-border p-5 flex flex-col relative african-motif-corner overflow-hidden">
             <div className="flex items-center gap-2 mb-1">
               <Star className="h-5 w-5 text-muted-foreground" />
               <h3 className="font-display text-sm font-bold">Gratuit</h3>
@@ -104,7 +104,7 @@ const Forfaits = () => {
           </div>
 
           {/* Standard 600 FCFA */}
-          <div className="rounded-lg bg-card p-5 flex flex-col gradient-border relative">
+          <div className="rounded-lg bg-card p-5 flex flex-col gradient-border relative african-motif-corner african-diamond african-zigzag-top overflow-hidden">
             <div className="flex items-center gap-2 mb-1">
               <Zap className="h-5 w-5 text-primary" />
               <h3 className="font-display text-sm font-bold text-primary">Standard</h3>
@@ -145,7 +145,7 @@ const Forfaits = () => {
           </div>
 
           {/* Premium 1000 FCFA */}
-          <div className="rounded-lg bg-card p-5 flex flex-col relative overflow-hidden border border-swaap-gold/30">
+          <div className="rounded-lg bg-card p-5 flex flex-col relative overflow-hidden border border-swaap-gold/30 african-motif-corner african-cross african-zigzag-top">
             <div className="absolute top-0 right-0 bg-swaap-gold text-primary-foreground text-[10px] font-bold px-3 py-1 rounded-bl-lg">
               POPULAIRE
             </div>

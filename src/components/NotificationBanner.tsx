@@ -2,7 +2,7 @@ import { AlertTriangle } from "lucide-react";
 
 const NotificationBanner = () => {
   return (
-    <div className="rounded-lg bg-gradient-to-r from-primary/20 via-secondary/10 to-primary/20 border border-primary/30 p-3 flex items-center gap-3">
+    <div className="rounded-lg bg-gradient-to-r from-primary/20 via-secondary/10 to-primary/20 border border-primary/30 p-3 flex items-center gap-3 relative african-zigzag-top overflow-hidden">
       <AlertTriangle className="h-5 w-5 text-swaap-gold flex-shrink-0" />
       <div>
         <p className="text-sm font-semibold">

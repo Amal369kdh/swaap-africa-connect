@@ -8,7 +8,7 @@ const alerts = [
 
 const PassMatchBoost = () => {
   return (
-    <div className="rounded-lg bg-card p-4 gradient-border">
+    <div className="rounded-lg bg-card p-4 gradient-border relative african-motif-corner african-diamond african-zigzag-top overflow-hidden">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Zap className="h-5 w-5 text-swaap-gold" />

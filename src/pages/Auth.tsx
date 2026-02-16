@@ -8,11 +8,29 @@ import { toast } from "@/hooks/use-toast";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [isForgot, setIsForgot] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + "/auth",
+      });
+      if (error) throw error;
+      toast({ title: "Email envoyé !", description: "Vérifie ta boîte mail pour réinitialiser ton mot de passe." });
+      setIsForgot(false);
+    } catch (error: any) {
+      toast({ title: "Erreur", description: error.message, variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,80 +87,120 @@ const Auth = () => {
           <div className="text-center space-y-2">
             <Flame className="h-10 w-10 text-primary mx-auto animate-pulse-glow" />
             <h1 className="font-display text-lg font-bold text-gradient-swaap">
-              {isLogin ? "Connexion" : "Inscription"}
+              {isForgot ? "Mot de passe oublié" : isLogin ? "Connexion" : "Inscription"}
             </h1>
             <p className="text-sm text-muted-foreground">
-              {isLogin ? "Content de te revoir !" : "Rejoins la communauté Swaap"}
+              {isForgot ? "Entre ton email pour recevoir un lien de réinitialisation" : isLogin ? "Content de te revoir !" : "Rejoins la communauté Swaap"}
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {!isLogin && (
+          {isForgot ? (
+            <form onSubmit={handleForgotPassword} className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-medium text-muted-foreground">Nom d'affichage</label>
+                <label className="text-xs font-medium text-muted-foreground">Email</label>
                 <div className="flex items-center gap-2 rounded-lg bg-muted px-3 py-2.5">
-                  <User className="h-4 w-4 text-muted-foreground" />
+                  <Mail className="h-4 w-4 text-muted-foreground" />
                   <input
-                    type="text"
-                    value={displayName}
-                    onChange={(e) => setDisplayName(e.target.value)}
-                    placeholder="Samba Diallo"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="ton@email.com"
                     className="bg-transparent text-sm outline-none w-full placeholder:text-muted-foreground/60"
                     required
                   />
                 </div>
               </div>
-            )}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full rounded-md bg-primary py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50 glow-orange"
+              >
+                {loading ? "Envoi..." : "Envoyer le lien de réinitialisation"}
+              </button>
+              <p className="text-center text-sm text-muted-foreground">
+                <button onClick={() => setIsForgot(false)} className="text-primary font-semibold hover:underline">
+                  Retour à la connexion
+                </button>
+              </p>
+            </form>
+          ) : (
+            <>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {!isLogin && (
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-medium text-muted-foreground">Nom d'affichage</label>
+                    <div className="flex items-center gap-2 rounded-lg bg-muted px-3 py-2.5">
+                      <User className="h-4 w-4 text-muted-foreground" />
+                      <input
+                        type="text"
+                        value={displayName}
+                        onChange={(e) => setDisplayName(e.target.value)}
+                        placeholder="Samba Diallo"
+                        className="bg-transparent text-sm outline-none w-full placeholder:text-muted-foreground/60"
+                        required
+                      />
+                    </div>
+                  </div>
+                )}
 
-            <div className="space-y-1.5">
-              <label className="text-xs font-medium text-muted-foreground">Email</label>
-              <div className="flex items-center gap-2 rounded-lg bg-muted px-3 py-2.5">
-                <Mail className="h-4 w-4 text-muted-foreground" />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="ton@email.com"
-                  className="bg-transparent text-sm outline-none w-full placeholder:text-muted-foreground/60"
-                  required
-                />
-              </div>
-            </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-medium text-muted-foreground">Email</label>
+                  <div className="flex items-center gap-2 rounded-lg bg-muted px-3 py-2.5">
+                    <Mail className="h-4 w-4 text-muted-foreground" />
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="ton@email.com"
+                      className="bg-transparent text-sm outline-none w-full placeholder:text-muted-foreground/60"
+                      required
+                    />
+                  </div>
+                </div>
 
-            <div className="space-y-1.5">
-              <label className="text-xs font-medium text-muted-foreground">Mot de passe</label>
-              <div className="flex items-center gap-2 rounded-lg bg-muted px-3 py-2.5">
-                <Lock className="h-4 w-4 text-muted-foreground" />
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="bg-transparent text-sm outline-none w-full placeholder:text-muted-foreground/60"
-                  required
-                  minLength={6}
-                />
-              </div>
-            </div>
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-medium text-muted-foreground">Mot de passe</label>
+                    {isLogin && (
+                      <button type="button" onClick={() => setIsForgot(true)} className="text-xs text-primary hover:underline">
+                        Mot de passe oublié ?
+                      </button>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2 rounded-lg bg-muted px-3 py-2.5">
+                    <Lock className="h-4 w-4 text-muted-foreground" />
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="••••••••"
+                      className="bg-transparent text-sm outline-none w-full placeholder:text-muted-foreground/60"
+                      required
+                      minLength={6}
+                    />
+                  </div>
+                </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full rounded-md bg-primary py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50 glow-orange"
-            >
-              {loading ? "Chargement..." : isLogin ? "Se connecter" : "Créer mon compte"}
-            </button>
-          </form>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full rounded-md bg-primary py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50 glow-orange"
+                >
+                  {loading ? "Chargement..." : isLogin ? "Se connecter" : "Créer mon compte"}
+                </button>
+              </form>
 
-          <p className="text-center text-sm text-muted-foreground">
-            {isLogin ? "Pas encore de compte ?" : "Déjà inscrit ?"}{" "}
-            <button
-              onClick={() => setIsLogin(!isLogin)}
-              className="text-primary font-semibold hover:underline"
-            >
-              {isLogin ? "S'inscrire" : "Se connecter"}
-            </button>
-          </p>
+              <p className="text-center text-sm text-muted-foreground">
+                {isLogin ? "Pas encore de compte ?" : "Déjà inscrit ?"}{" "}
+                <button
+                  onClick={() => setIsLogin(!isLogin)}
+                  className="text-primary font-semibold hover:underline"
+                >
+                  {isLogin ? "S'inscrire" : "Se connecter"}
+                </button>
+              </p>
+            </>
+          )}
         </div>
       </main>
     </div>

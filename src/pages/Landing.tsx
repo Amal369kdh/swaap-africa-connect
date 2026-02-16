@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Flame, ArrowRight, Repeat, Heart, Users, TrendingUp, Eye, MapPin, Sparkles } from "lucide-react";
+import { Flame, ArrowRight, Repeat, Heart, Users, TrendingUp, Eye, MapPin, Sparkles, Trophy, Gift, Crown, Star } from "lucide-react";
 import { Link, Navigate } from "react-router-dom";
 import { useUser } from "@/contexts/UserContext";
 import { usePlatform } from "@/contexts/PlatformContext";
@@ -8,12 +8,28 @@ import MaskAvatar from "@/components/MaskAvatar";
 import AnimatedLogo from "@/components/AnimatedLogo";
 import swaapLogo from "@/assets/swaap-logo.jpeg";
 
+// Ligue preview data
+const ligueCountries = [
+  { name: "Côte d'Ivoire", flag: "🇨🇮", score: 10452, rank: 1 },
+  { name: "Sénégal", flag: "🇸🇳", score: 8890, rank: 2 },
+  { name: "Mali", flag: "🇲🇱", score: 7525, rank: 3 },
+  { name: "Cameroun", flag: "🇨🇲", score: 6210, rank: 4 },
+  { name: "Guinée", flag: "🇬🇳", score: 4880, rank: 5 },
+];
+
 const empires = [
   { name: "Empire du Mali", flag: "🇲🇱", lit: true, score: 10452, color: "from-primary to-swaap-gold" },
   { name: "Empire Songhaï", flag: "🇳🇪", lit: true, score: 8890, color: "from-secondary to-primary" },
   { name: "Royaume Ashanti", flag: "🇬🇭", lit: false, score: 0, color: "" },
   { name: "Empire du Ghana", flag: "🇬🇭", lit: false, score: 0, color: "" },
   { name: "Royaume du Kongo", flag: "🇨🇬", lit: false, score: 0, color: "" },
+];
+
+// Dons impact data
+const donsImpact = [
+  { label: "Livres scolaires distribués", count: 342, icon: "📚", city: "Abidjan" },
+  { label: "Repas offerts", count: 128, icon: "🍲", city: "Dakar" },
+  { label: "Vêtements donnés", count: 567, icon: "👕", city: "Bamako" },
 ];
 
 const previewItems = [
@@ -120,8 +136,131 @@ const Landing = () => {
           </Link>
         </section>
 
+        {/* ===== LIGUE DES NATIONS — Section vedette ===== */}
+        <section className="rounded-xl bg-card border border-primary/20 p-5 animate-fade-in relative african-motif-corner african-zigzag-top overflow-hidden" style={{ animationDelay: "0.2s", opacity: 0 }}>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <Trophy className="h-6 w-6 text-swaap-gold" />
+              <div>
+                <h2 className="font-display text-base font-bold tracking-wide">Ligue des Nations</h2>
+                <p className="text-[10px] text-muted-foreground">Classement en direct · Saison 1</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-[10px] font-semibold text-primary animate-pulse-glow">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+              EN DIRECT
+            </div>
+          </div>
+
+          {/* Classement */}
+          <div className="space-y-2 mb-4">
+            {ligueCountries.map((country) => (
+              <div
+                key={country.name}
+                className={`flex items-center justify-between rounded-lg px-3 py-2.5 transition-colors ${
+                  country.rank === 1
+                    ? "bg-swaap-gold/10 border border-swaap-gold/20"
+                    : "bg-muted/30 hover:bg-muted/50"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <span className={`font-display text-sm font-bold w-5 text-center ${
+                    country.rank === 1 ? "text-swaap-gold" : country.rank <= 3 ? "text-primary" : "text-muted-foreground"
+                  }`}>
+                    {country.rank}
+                  </span>
+                  <span className="text-lg">{country.flag}</span>
+                  <span className="text-sm font-medium">{country.name}</span>
+                  {country.rank === 1 && <Crown className="h-3.5 w-3.5 text-swaap-gold" />}
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Flame className="h-3.5 w-3.5 text-primary" />
+                  <span className="font-display text-sm font-bold text-primary">
+                    {country.score.toLocaleString()}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center space-y-2">
+            <p className="text-[10px] text-muted-foreground">
+              🔥 Week-end <span className="text-primary font-semibold">Double Impact</span> — points doublés ce samedi !
+            </p>
+            <Link
+              to="/auth"
+              className="inline-flex items-center gap-2 rounded-md bg-primary/15 border border-primary/30 px-4 py-2 text-xs font-semibold text-primary hover:bg-primary/25 transition-colors"
+            >
+              <Trophy className="h-3.5 w-3.5" />
+              Représente ton pays
+              <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
+        </section>
+
+        {/* ===== DONS & IMPACT — Accroche émotionnelle ===== */}
+        <section className="rounded-xl bg-card border border-secondary/20 p-5 animate-fade-in relative african-motif-corner african-cross overflow-hidden" style={{ animationDelay: "0.3s", opacity: 0 }}>
+          <div className="flex items-center gap-2 mb-1">
+            <Heart className="h-6 w-6 text-secondary" />
+            <h2 className="font-display text-base font-bold tracking-wide">Ton don change des vies</h2>
+          </div>
+          <p className="text-xs text-muted-foreground mb-4">
+            Chaque échange et chaque don finance un impact réel dans la communauté.
+          </p>
+
+          <div className="grid grid-cols-3 gap-2 mb-4">
+            {donsImpact.map((don) => (
+              <div key={don.label} className="rounded-lg bg-secondary/5 border border-secondary/10 p-3 text-center">
+                <span className="text-2xl">{don.icon}</span>
+                <p className="font-display text-lg font-bold text-foreground mt-1">{don.count}</p>
+                <p className="text-[9px] text-muted-foreground leading-tight">{don.label}</p>
+                <p className="text-[8px] text-secondary mt-0.5">{don.city}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="rounded-lg bg-secondary/5 border border-secondary/15 p-3 mb-3">
+            <p className="text-xs text-center">
+              <span className="text-secondary font-semibold">« Quand tu échanges, tu aides. »</span>
+              <br />
+              <span className="text-[10px] text-muted-foreground">
+                Une partie de chaque transaction est convertie en dons pour ceux qui en ont besoin.
+              </span>
+            </p>
+          </div>
+
+          <div className="text-center">
+            <Link
+              to="/auth"
+              className="inline-flex items-center gap-2 rounded-md bg-secondary/15 border border-secondary/30 px-4 py-2 text-xs font-semibold text-secondary hover:bg-secondary/25 transition-colors"
+            >
+              <Heart className="h-3.5 w-3.5" />
+              Participer aux dons
+              <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
+        </section>
+
+        {/* ===== Teaser cadeaux — subtil ===== */}
+        <section className="rounded-lg bg-gradient-to-r from-swaap-gold/5 via-primary/5 to-secondary/5 border border-swaap-gold/15 p-4 animate-fade-in" style={{ animationDelay: "0.35s", opacity: 0 }}>
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-swaap-gold/10">
+              <Gift className="h-5 w-5 text-swaap-gold" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-semibold flex items-center gap-1.5">
+                Des surprises arrivent...
+                <Sparkles className="h-3.5 w-3.5 text-swaap-gold" />
+              </p>
+              <p className="text-[10px] text-muted-foreground">
+                Plus tu es actif, plus tu as de chances de recevoir des cadeaux de la communauté.
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* Animated live stats */}
-        <section className="grid grid-cols-2 md:grid-cols-4 gap-3 animate-fade-in" style={{ animationDelay: "0.2s", opacity: 0 }}>
+        <section className="grid grid-cols-2 md:grid-cols-4 gap-3 animate-fade-in" style={{ animationDelay: "0.4s", opacity: 0 }}>
           {[
             { icon: Users, label: "Membres actifs", value: members.count, ref: members.ref, suffix: "" },
             { icon: Repeat, label: "Trocs réalisés", value: trocs.count, ref: trocs.ref, suffix: "" },
@@ -139,7 +278,7 @@ const Landing = () => {
         </section>
 
         {/* Interactive empires */}
-        <section className="rounded-lg bg-card border border-border p-4 animate-fade-in" style={{ animationDelay: "0.3s", opacity: 0 }}>
+        <section className="rounded-lg bg-card border border-border p-4 animate-fade-in" style={{ animationDelay: "0.45s", opacity: 0 }}>
           <h2 className="font-display text-sm font-bold tracking-wide mb-1 text-center">
             Empires Historiques
           </h2>
@@ -166,7 +305,6 @@ const Landing = () => {
             ))}
           </div>
 
-          {/* Expanded empire detail */}
           {selectedEmpire !== null && empires[selectedEmpire].lit && (
             <div className="mt-4 rounded-lg bg-muted/30 p-4 animate-fade-in border border-border/50">
               <div className="flex items-center justify-between mb-2">
@@ -193,14 +331,10 @@ const Landing = () => {
               </p>
             </div>
           )}
-
-          <p className="text-[10px] text-muted-foreground text-center mt-3">
-            Les empires s'illuminent avec la progression collective
-          </p>
         </section>
 
         {/* Mask grades preview */}
-        <section className="rounded-lg bg-card border border-border p-4 animate-fade-in" style={{ animationDelay: "0.35s", opacity: 0 }}>
+        <section className="rounded-lg bg-card border border-border p-4 animate-fade-in" style={{ animationDelay: "0.5s", opacity: 0 }}>
           <h2 className="font-display text-sm font-bold tracking-wide mb-1 text-center">
             Grades & Masques
           </h2>
@@ -225,8 +359,8 @@ const Landing = () => {
           </div>
         </section>
 
-        {/* Preview of trocs/dons with mask avatars */}
-        <section className="rounded-lg bg-card border border-border p-4 animate-fade-in" style={{ animationDelay: "0.4s", opacity: 0 }}>
+        {/* Preview activity */}
+        <section className="rounded-lg bg-card border border-border p-4 animate-fade-in" style={{ animationDelay: "0.55s", opacity: 0 }}>
           <div className="flex items-center justify-between mb-3">
             <h2 className="font-display text-sm font-bold tracking-wide flex items-center gap-2">
               <Eye className="h-4 w-4 text-primary" />
@@ -274,7 +408,7 @@ const Landing = () => {
         </section>
 
         {/* CTA bottom */}
-        <section className="text-center py-6 animate-fade-in" style={{ animationDelay: "0.5s", opacity: 0 }}>
+        <section className="text-center py-6 animate-fade-in" style={{ animationDelay: "0.6s", opacity: 0 }}>
           <p className="text-sm text-muted-foreground mb-3">Prêt à rejoindre le mouvement ?</p>
           <Link
             to="/auth"

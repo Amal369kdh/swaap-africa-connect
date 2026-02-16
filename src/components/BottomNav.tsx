@@ -1,5 +1,6 @@
-import { Home, Repeat, Heart, Trophy, User } from "lucide-react";
+import { Home, Repeat, Heart, Trophy, User, Lock } from "lucide-react";
 import { useLocation, Link } from "react-router-dom";
+import { usePlatform, isFeatureUnlocked } from "@/contexts/PlatformContext";
 
 const navItems = [
   { icon: Home, label: "Accueil", path: "/dashboard" },
@@ -11,12 +12,28 @@ const navItems = [
 
 const BottomNav = () => {
   const { pathname } = useLocation();
+  const { phase, isAdmin } = usePlatform();
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background/90 backdrop-blur-xl md:hidden">
       <div className="flex items-center justify-around py-2">
         {navItems.map((item) => {
           const active = pathname === item.path;
+          const unlocked = isFeatureUnlocked(item.path, phase, isAdmin);
+
+          if (!unlocked) {
+            return (
+              <div
+                key={item.label}
+                className="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-lg text-muted-foreground/30 cursor-not-allowed relative"
+              >
+                <item.icon className="h-5 w-5" />
+                <span className="text-[10px] font-medium">{item.label}</span>
+                <Lock className="h-2.5 w-2.5 absolute top-1 right-1 text-muted-foreground/40" />
+              </div>
+            );
+          }
+
           return (
             <Link
               key={item.label}

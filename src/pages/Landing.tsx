@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { Flame, ArrowRight, Repeat, Heart, Users, TrendingUp, Eye, MapPin, Sparkles } from "lucide-react";
 import { Link, Navigate } from "react-router-dom";
 import { useUser } from "@/contexts/UserContext";
+import { usePlatform } from "@/contexts/PlatformContext";
 import { MASK_GRADES } from "@/lib/masks";
 import MaskAvatar from "@/components/MaskAvatar";
 import AnimatedLogo from "@/components/AnimatedLogo";
@@ -54,6 +55,7 @@ const useAnimatedCounter = (target: number, duration = 2000) => {
 
 const Landing = () => {
   const { isConnected, loading } = useUser();
+  const { phase } = usePlatform();
   const [selectedEmpire, setSelectedEmpire] = useState<number | null>(null);
 
   // Animated counters
@@ -97,7 +99,7 @@ const Landing = () => {
       <main className="container px-4 py-8 space-y-8">
         {/* Hero with animated logo */}
         <section className="text-center space-y-4 animate-fade-in">
-          <AnimatedLogo />
+          <AnimatedLogo phase={phase} />
           <h1 className="font-display text-xl md:text-3xl font-bold text-gradient-swaap leading-tight">
             La flamme africaine
             <br />

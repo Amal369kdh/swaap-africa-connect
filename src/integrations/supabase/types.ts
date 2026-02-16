@@ -56,6 +56,36 @@ export type Database = {
         }
         Relationships: []
       }
+      platform_config: {
+        Row: {
+          alert_threshold_annonces: number
+          alert_threshold_credits: number
+          alert_threshold_users: number
+          current_phase: number
+          id: string
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          alert_threshold_annonces?: number
+          alert_threshold_credits?: number
+          alert_threshold_users?: number
+          current_phase?: number
+          id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          alert_threshold_annonces?: number
+          alert_threshold_credits?: number
+          alert_threshold_users?: number
+          current_phase?: number
+          id?: string
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           country: string | null

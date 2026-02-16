@@ -34,11 +34,12 @@ const describeArc = (cx: number, cy: number, r: number, startAngle: number, endA
 // Phase-based configs
 const phaseConfig = {
   1: {
-    // Phase 1: Logo partially revealed, slow, simple
-    logoRadius: 85,
-    logoOpacity: 0.75,
-    logoRotateSpeed: 60, // slow
-    clipReveal: 0.6, // 60% of the logo visible (mask effect)
+    // Phase 1: Logo small, dark, rotating slowly
+    logoRadius: 70,
+    logoOpacity: 0.5,
+    logoRotateSpeed: 50,
+    logoRotates: true,
+    clipReveal: 0.45,
     rings: [
       { radius: 130, segments: [{ start: 0, end: 80 }, { start: 120, end: 200 }, { start: 240, end: 320 }], stroke: "hsl(28 100% 55%)", width: 3, opacity: 0.7, direction: -1, speed: 35 },
       { radius: 110, segments: [{ start: 10, end: 60 }, { start: 130, end: 180 }, { start: 250, end: 300 }], stroke: "hsl(270 80% 55%)", width: 2.5, opacity: 0.45, direction: 1, speed: 45 },
@@ -48,11 +49,12 @@ const phaseConfig = {
     borderRings: 1,
   },
   2: {
-    // Phase 2: Logo more revealed, faster, richer
-    logoRadius: 95,
-    logoOpacity: 0.9,
-    logoRotateSpeed: 45,
-    clipReveal: 0.85,
+    // Phase 2: Logo bigger, brighter, still rotating
+    logoRadius: 90,
+    logoOpacity: 0.75,
+    logoRotateSpeed: 40,
+    logoRotates: true,
+    clipReveal: 0.7,
     rings: [
       { radius: 138, segments: [{ start: 0, end: 70 }, { start: 90, end: 160 }, { start: 180, end: 250 }, { start: 270, end: 340 }], stroke: "hsl(28 100% 55%)", width: 3.5, opacity: 0.8, direction: -1, speed: 28 },
       { radius: 120, segments: [{ start: 20, end: 80 }, { start: 140, end: 200 }, { start: 260, end: 320 }], stroke: "hsl(270 80% 55%)", width: 2.5, opacity: 0.6, direction: 1, speed: 35 },
@@ -63,10 +65,11 @@ const phaseConfig = {
     borderRings: 2,
   },
   3: {
-    // Phase 3: Logo fully revealed, fast, all effects
-    logoRadius: 105,
+    // Phase 3: Logo full, bright, STATIC
+    logoRadius: 110,
     logoOpacity: 1,
-    logoRotateSpeed: 35,
+    logoRotateSpeed: 0,
+    logoRotates: false,
     clipReveal: 1,
     rings: [
       { radius: 142, segments: [{ start: 0, end: 60 }, { start: 72, end: 132 }, { start: 144, end: 204 }, { start: 216, end: 276 }, { start: 288, end: 348 }], stroke: "hsl(28 100% 55%)", width: 4, opacity: 0.85, direction: -1, speed: 22 },
@@ -233,24 +236,40 @@ const AnimatedLogo = ({ phase = 1, isAdmin = false, onPhasePreview }: AnimatedLo
               />
             ))}
 
-            {/* THE LOGO — rotating on itself, filling the circle, with phase-based reveal */}
-            <motion.g
-              animate={{ rotate: 360 }}
-              transition={{ duration: cfg.logoRotateSpeed, repeat: Infinity, ease: "linear" }}
-              style={{ transformOrigin: `${cx}px ${cy}px` }}
-            >
-              <image
-                href={swaapLogo}
-                x={cx - cfg.logoRadius}
-                y={cy - cfg.logoRadius}
-                width={cfg.logoRadius * 2}
-                height={cfg.logoRadius * 2}
-                clipPath={`url(#logo-clip-${activePhase})`}
-                mask={`url(#logo-mask-${activePhase})`}
-                preserveAspectRatio="xMidYMid slice"
-                opacity={cfg.logoOpacity}
-              />
-            </motion.g>
+            {/* THE LOGO — conditionally rotating based on phase */}
+            {cfg.logoRotates ? (
+              <motion.g
+                animate={{ rotate: 360 }}
+                transition={{ duration: cfg.logoRotateSpeed, repeat: Infinity, ease: "linear" }}
+                style={{ transformOrigin: `${cx}px ${cy}px` }}
+              >
+                <image
+                  href={swaapLogo}
+                  x={cx - cfg.logoRadius}
+                  y={cy - cfg.logoRadius}
+                  width={cfg.logoRadius * 2}
+                  height={cfg.logoRadius * 2}
+                  clipPath={`url(#logo-clip-${activePhase})`}
+                  mask={`url(#logo-mask-${activePhase})`}
+                  preserveAspectRatio="xMidYMid slice"
+                  opacity={cfg.logoOpacity}
+                />
+              </motion.g>
+            ) : (
+              <g>
+                <image
+                  href={swaapLogo}
+                  x={cx - cfg.logoRadius}
+                  y={cy - cfg.logoRadius}
+                  width={cfg.logoRadius * 2}
+                  height={cfg.logoRadius * 2}
+                  clipPath={`url(#logo-clip-${activePhase})`}
+                  mask={`url(#logo-mask-${activePhase})`}
+                  preserveAspectRatio="xMidYMid slice"
+                  opacity={cfg.logoOpacity}
+                />
+              </g>
+            )}
 
             {/* Pulsating glow ring around logo */}
             <motion.circle

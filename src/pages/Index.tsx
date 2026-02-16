@@ -1,5 +1,4 @@
 import Header from "@/components/Header";
-import AnimatedLogo from "@/components/AnimatedLogo";
 import NotificationBanner from "@/components/NotificationBanner";
 import LigueDesNations from "@/components/LigueDesNations";
 import RadarProximite from "@/components/RadarProximite";
@@ -21,11 +20,6 @@ const Index = () => {
       {geo.denied && <GeoAlert />}
 
       <main className="container px-4 py-6 space-y-6">
-        {/* Animated central logo */}
-        <section className="animate-fade-in">
-          <AnimatedLogo />
-        </section>
-
         {/* Notification banner */}
         <section className="animate-fade-in" style={{ animationDelay: "0.2s", opacity: 0 }}>
           <NotificationBanner />

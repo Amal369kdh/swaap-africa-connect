@@ -4,6 +4,7 @@ import { Link, Navigate } from "react-router-dom";
 import { useUser } from "@/contexts/UserContext";
 import { MASK_GRADES } from "@/lib/masks";
 import MaskAvatar from "@/components/MaskAvatar";
+import AnimatedLogo from "@/components/AnimatedLogo";
 import swaapLogo from "@/assets/swaap-logo.jpeg";
 
 const empires = [
@@ -53,7 +54,6 @@ const useAnimatedCounter = (target: number, duration = 2000) => {
 
 const Landing = () => {
   const { isConnected, loading } = useUser();
-  const [flameIntensity, setFlameIntensity] = useState(0);
   const [selectedEmpire, setSelectedEmpire] = useState<number | null>(null);
 
   // Animated counters
@@ -62,24 +62,11 @@ const Landing = () => {
   const dons = useAnimatedCounter(1156);
   const score = useAnimatedCounter(42500);
 
-  // Flame animation
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setFlameIntensity((prev) => (prev + 1) % 3);
-    }, 2000);
-    return () => clearInterval(interval);
-  }, []);
 
   if (!loading && isConnected) {
     return <Navigate to="/dashboard" replace />;
   }
 
-  const flameSizes = ["h-12 w-12", "h-14 w-14", "h-16 w-16"];
-  const flameGlows = [
-    "shadow-[0_0_20px_hsl(28_100%_55%/0.3)]",
-    "shadow-[0_0_40px_hsl(28_100%_55%/0.5),0_0_80px_hsl(28_100%_55%/0.2)]",
-    "shadow-[0_0_60px_hsl(28_100%_55%/0.6),0_0_120px_hsl(270_80%_55%/0.2)]",
-  ];
 
   return (
     <div className="min-h-screen bg-background african-pattern-bg">
@@ -108,25 +95,9 @@ const Landing = () => {
       </header>
 
       <main className="container px-4 py-8 space-y-8">
-        {/* Hero with animated collective flame */}
+        {/* Hero with animated logo */}
         <section className="text-center space-y-4 animate-fade-in">
-          <div className={`mx-auto w-28 h-28 rounded-full bg-gradient-to-br from-primary/20 via-secondary/10 to-swaap-gold/20 flex items-center justify-center transition-all duration-1000 ${flameGlows[flameIntensity]}`}>
-            <div className="relative">
-              <Flame className={`${flameSizes[flameIntensity]} text-primary transition-all duration-1000`} />
-              {/* Particle sparks */}
-              {[0, 1, 2].map((i) => (
-                <Sparkles
-                  key={i}
-                  className="absolute text-swaap-gold/60 h-3 w-3 animate-pulse-glow"
-                  style={{
-                    top: `${-8 + i * 4}px`,
-                    left: `${-4 + i * 12}px`,
-                    animationDelay: `${i * 0.6}s`,
-                  }}
-                />
-              ))}
-            </div>
-          </div>
+          <AnimatedLogo />
           <h1 className="font-display text-xl md:text-3xl font-bold text-gradient-swaap leading-tight">
             La flamme africaine
             <br />

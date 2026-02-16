@@ -35,11 +35,11 @@ const describeArc = (cx: number, cy: number, r: number, startAngle: number, endA
 const phaseConfig = {
   1: {
     // Phase 1: Logo small, dark, rotating slowly
-    logoRadius: 70,
-    logoOpacity: 0.5,
+    logoRadius: 55,
+    logoOpacity: 0.45,
     logoRotateSpeed: 50,
     logoRotates: true,
-    clipReveal: 0.45,
+    clipReveal: 0.4,
     rings: [
       { radius: 130, segments: [{ start: 0, end: 80 }, { start: 120, end: 200 }, { start: 240, end: 320 }], stroke: "hsl(28 100% 55%)", width: 3, opacity: 0.7, direction: -1, speed: 35 },
       { radius: 110, segments: [{ start: 10, end: 60 }, { start: 130, end: 180 }, { start: 250, end: 300 }], stroke: "hsl(270 80% 55%)", width: 2.5, opacity: 0.45, direction: 1, speed: 45 },
@@ -49,12 +49,12 @@ const phaseConfig = {
     borderRings: 1,
   },
   2: {
-    // Phase 2: Logo bigger, brighter, still rotating
-    logoRadius: 90,
-    logoOpacity: 0.75,
+    // Phase 2: Logo medium, brighter, still rotating
+    logoRadius: 80,
+    logoOpacity: 0.7,
     logoRotateSpeed: 40,
     logoRotates: true,
-    clipReveal: 0.7,
+    clipReveal: 0.65,
     rings: [
       { radius: 138, segments: [{ start: 0, end: 70 }, { start: 90, end: 160 }, { start: 180, end: 250 }, { start: 270, end: 340 }], stroke: "hsl(28 100% 55%)", width: 3.5, opacity: 0.8, direction: -1, speed: 28 },
       { radius: 120, segments: [{ start: 20, end: 80 }, { start: 140, end: 200 }, { start: 260, end: 320 }], stroke: "hsl(270 80% 55%)", width: 2.5, opacity: 0.6, direction: 1, speed: 35 },
@@ -65,17 +65,17 @@ const phaseConfig = {
     borderRings: 2,
   },
   3: {
-    // Phase 3: Logo full, bright, STATIC — much bigger
-    logoRadius: 130,
+    // Phase 3: Logo fills the circle, bright, STATIC
+    logoRadius: 120,
     logoOpacity: 1,
     logoRotateSpeed: 0,
     logoRotates: false,
     clipReveal: 1,
     rings: [
-      { radius: 148, segments: [{ start: 0, end: 60 }, { start: 72, end: 132 }, { start: 144, end: 204 }, { start: 216, end: 276 }, { start: 288, end: 348 }], stroke: "hsl(28 100% 55%)", width: 4, opacity: 0.85, direction: -1, speed: 22 },
-      { radius: 140, segments: [{ start: 10, end: 65 }, { start: 100, end: 155 }, { start: 190, end: 245 }, { start: 280, end: 335 }], stroke: "hsl(270 80% 55%)", width: 3, opacity: 0.65, direction: 1, speed: 30 },
-      { radius: 135, segments: [{ start: 0, end: 50 }, { start: 120, end: 170 }, { start: 240, end: 290 }], stroke: "hsl(42 100% 60%)", width: 2.5, opacity: 0.55, direction: -1, speed: 40 },
-      { radius: 132, segments: [{ start: 30, end: 70 }, { start: 150, end: 190 }, { start: 270, end: 310 }], stroke: "hsl(28 100% 55%)", width: 2, opacity: 0.4, direction: 1, speed: 55 },
+      { radius: 155, segments: [{ start: 0, end: 60 }, { start: 72, end: 132 }, { start: 144, end: 204 }, { start: 216, end: 276 }, { start: 288, end: 348 }], stroke: "hsl(28 100% 55%)", width: 4, opacity: 0.85, direction: -1, speed: 22 },
+      { radius: 145, segments: [{ start: 10, end: 65 }, { start: 100, end: 155 }, { start: 190, end: 245 }, { start: 280, end: 335 }], stroke: "hsl(270 80% 55%)", width: 3, opacity: 0.65, direction: 1, speed: 30 },
+      { radius: 137, segments: [{ start: 0, end: 50 }, { start: 120, end: 170 }, { start: 240, end: 290 }], stroke: "hsl(42 100% 60%)", width: 2.5, opacity: 0.55, direction: -1, speed: 40 },
+      { radius: 130, segments: [{ start: 30, end: 70 }, { start: 150, end: 190 }, { start: 270, end: 310 }], stroke: "hsl(28 100% 55%)", width: 2, opacity: 0.4, direction: 1, speed: 55 },
     ],
     maxNotifs: 6,
     glowIntensity: 0.7,

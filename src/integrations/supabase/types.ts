@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      annonces: {
+        Row: {
+          category: string
+          city: string
+          created_at: string
+          description: string
+          exchange_for: string
+          id: string
+          image_url: string | null
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string
+          city?: string
+          created_at?: string
+          description?: string
+          exchange_for?: string
+          id?: string
+          image_url?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          city?: string
+          created_at?: string
+          description?: string
+          exchange_for?: string
+          id?: string
+          image_url?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           country: string | null

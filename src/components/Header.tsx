@@ -29,8 +29,8 @@ const Header = ({ geo }: HeaderProps) => {
   const PlanIcon = planIcons[plan];
   const mask = getMaskForPlan(plan);
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     navigate("/");
   };
 

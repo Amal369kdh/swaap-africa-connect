@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { Flame, ArrowRight, Repeat, Heart, Users, TrendingUp, Eye, MapPin, Sparkles } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useUser } from "@/contexts/UserContext";
 import { MASK_GRADES } from "@/lib/masks";
 import MaskAvatar from "@/components/MaskAvatar";
@@ -52,8 +52,7 @@ const useAnimatedCounter = (target: number, duration = 2000) => {
 };
 
 const Landing = () => {
-  const { isConnected } = useUser();
-  const navigate = useNavigate();
+  const { isConnected, loading } = useUser();
   const [flameIntensity, setFlameIntensity] = useState(0);
   const [selectedEmpire, setSelectedEmpire] = useState<number | null>(null);
 
@@ -71,9 +70,8 @@ const Landing = () => {
     return () => clearInterval(interval);
   }, []);
 
-  if (isConnected) {
-    navigate("/dashboard");
-    return null;
+  if (!loading && isConnected) {
+    return <Navigate to="/dashboard" replace />;
   }
 
   const flameSizes = ["h-12 w-12", "h-14 w-14", "h-16 w-16"];
@@ -94,13 +92,13 @@ const Landing = () => {
           </div>
           <div className="flex items-center gap-2">
             <Link
-              to="/forfaits"
+              to="/auth"
               className="rounded-md border border-border px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-muted transition-colors"
             >
               S'inscrire
             </Link>
             <Link
-              to="/forfaits"
+              to="/auth"
               className="rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
             >
               Se connecter
@@ -141,7 +139,7 @@ const Landing = () => {
             🔥 La flamme grandit avec chaque nouveau membre
           </p>
           <Link
-            to="/forfaits"
+            to="/auth"
             className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors glow-orange"
           >
             Rejoindre la communauté
@@ -293,7 +291,7 @@ const Landing = () => {
           </div>
           <div className="mt-3 text-center">
             <Link
-              to="/forfaits"
+              to="/auth"
               className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:text-primary/80 transition-colors"
             >
               Inscris-toi pour participer
@@ -306,7 +304,7 @@ const Landing = () => {
         <section className="text-center py-6 animate-fade-in" style={{ animationDelay: "0.5s", opacity: 0 }}>
           <p className="text-sm text-muted-foreground mb-3">Prêt à rejoindre le mouvement ?</p>
           <Link
-            to="/forfaits"
+            to="/auth"
             className="inline-flex items-center gap-2 rounded-md bg-gradient-to-r from-swaap-gold to-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity glow-orange"
           >
             Voir les forfaits

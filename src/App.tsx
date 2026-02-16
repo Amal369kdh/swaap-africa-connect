@@ -4,7 +4,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { UserProvider } from "@/contexts/UserContext";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import Landing from "./pages/Landing";
+import Auth from "./pages/Auth";
 import Dashboard from "./pages/Index";
 import Ligue from "./pages/Ligue";
 import Troc from "./pages/Troc";
@@ -24,13 +26,13 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Landing />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/ligue" element={<Ligue />} />
-            <Route path="/troc" element={<Troc />} />
-            <Route path="/dons" element={<Dons />} />
-            <Route path="/profil" element={<Profil />} />
-            <Route path="/forfaits" element={<Forfaits />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/ligue" element={<ProtectedRoute><Ligue /></ProtectedRoute>} />
+            <Route path="/troc" element={<ProtectedRoute><Troc /></ProtectedRoute>} />
+            <Route path="/dons" element={<ProtectedRoute><Dons /></ProtectedRoute>} />
+            <Route path="/profil" element={<ProtectedRoute><Profil /></ProtectedRoute>} />
+            <Route path="/forfaits" element={<ProtectedRoute><Forfaits /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

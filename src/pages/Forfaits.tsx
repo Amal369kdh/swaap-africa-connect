@@ -32,11 +32,11 @@ const FeatureValue = ({ value }: { value: boolean | string }) => {
 };
 
 const Forfaits = () => {
-  const { login, isConnected } = useUser();
+  const { setPlan, isConnected } = useUser();
   const navigate = useNavigate();
 
-  const handleChoose = (plan: UserPlan) => {
-    login(plan);
+  const handleChoose = async (plan: UserPlan) => {
+    await setPlan(plan);
     navigate("/dashboard");
   };
 

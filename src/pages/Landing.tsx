@@ -55,7 +55,7 @@ const useAnimatedCounter = (target: number, duration = 2000) => {
 
 const Landing = () => {
   const { isConnected, loading } = useUser();
-  const { phase } = usePlatform();
+  const { phase, isAdmin } = usePlatform();
   const [selectedEmpire, setSelectedEmpire] = useState<number | null>(null);
 
   // Animated counters
@@ -99,7 +99,7 @@ const Landing = () => {
       <main className="container px-4 py-8 space-y-8">
         {/* Hero with animated logo */}
         <section className="text-center space-y-4 animate-fade-in">
-          <AnimatedLogo phase={phase} />
+          <AnimatedLogo phase={phase} isAdmin={isAdmin} />
           <h1 className="font-display text-xl md:text-3xl font-bold text-gradient-swaap leading-tight">
             La flamme africaine
             <br />

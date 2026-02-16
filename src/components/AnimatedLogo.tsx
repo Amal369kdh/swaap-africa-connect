@@ -41,8 +41,8 @@ const phaseConfig = {
     logoRotates: true,
     clipReveal: 0.4,
     rings: [
-      { radius: 130, segments: [{ start: 0, end: 80 }, { start: 120, end: 200 }, { start: 240, end: 320 }], stroke: "hsl(28 100% 55%)", width: 3, opacity: 0.7, direction: -1, speed: 35 },
-      { radius: 110, segments: [{ start: 10, end: 60 }, { start: 130, end: 180 }, { start: 250, end: 300 }], stroke: "hsl(270 80% 55%)", width: 2.5, opacity: 0.45, direction: 1, speed: 45 },
+      { radius: 90, segments: [{ start: 0, end: 80 }, { start: 120, end: 200 }, { start: 240, end: 320 }], stroke: "hsl(28 100% 55%)", width: 3, opacity: 0.7, direction: -1, speed: 35 },
+      { radius: 78, segments: [{ start: 10, end: 60 }, { start: 130, end: 180 }, { start: 250, end: 300 }], stroke: "hsl(270 80% 55%)", width: 2.5, opacity: 0.45, direction: 1, speed: 45 },
     ],
     maxNotifs: 3,
     glowIntensity: 0.3,
@@ -56,9 +56,9 @@ const phaseConfig = {
     logoRotates: true,
     clipReveal: 0.65,
     rings: [
-      { radius: 138, segments: [{ start: 0, end: 70 }, { start: 90, end: 160 }, { start: 180, end: 250 }, { start: 270, end: 340 }], stroke: "hsl(28 100% 55%)", width: 3.5, opacity: 0.8, direction: -1, speed: 28 },
-      { radius: 120, segments: [{ start: 20, end: 80 }, { start: 140, end: 200 }, { start: 260, end: 320 }], stroke: "hsl(270 80% 55%)", width: 2.5, opacity: 0.6, direction: 1, speed: 35 },
-      { radius: 105, segments: [{ start: 0, end: 50 }, { start: 120, end: 170 }, { start: 240, end: 290 }], stroke: "hsl(42 100% 60%)", width: 2, opacity: 0.45, direction: -1, speed: 50 },
+      { radius: 110, segments: [{ start: 0, end: 70 }, { start: 90, end: 160 }, { start: 180, end: 250 }, { start: 270, end: 340 }], stroke: "hsl(28 100% 55%)", width: 3.5, opacity: 0.8, direction: -1, speed: 28 },
+      { radius: 100, segments: [{ start: 20, end: 80 }, { start: 140, end: 200 }, { start: 260, end: 320 }], stroke: "hsl(270 80% 55%)", width: 2.5, opacity: 0.6, direction: 1, speed: 35 },
+      { radius: 92, segments: [{ start: 0, end: 50 }, { start: 120, end: 170 }, { start: 240, end: 290 }], stroke: "hsl(42 100% 60%)", width: 2, opacity: 0.45, direction: -1, speed: 50 },
     ],
     maxNotifs: 5,
     glowIntensity: 0.5,
@@ -72,10 +72,10 @@ const phaseConfig = {
     logoRotates: false,
     clipReveal: 1,
     rings: [
-      { radius: 155, segments: [{ start: 0, end: 60 }, { start: 72, end: 132 }, { start: 144, end: 204 }, { start: 216, end: 276 }, { start: 288, end: 348 }], stroke: "hsl(28 100% 55%)", width: 4, opacity: 0.85, direction: -1, speed: 22 },
-      { radius: 145, segments: [{ start: 10, end: 65 }, { start: 100, end: 155 }, { start: 190, end: 245 }, { start: 280, end: 335 }], stroke: "hsl(270 80% 55%)", width: 3, opacity: 0.65, direction: 1, speed: 30 },
-      { radius: 137, segments: [{ start: 0, end: 50 }, { start: 120, end: 170 }, { start: 240, end: 290 }], stroke: "hsl(42 100% 60%)", width: 2.5, opacity: 0.55, direction: -1, speed: 40 },
-      { radius: 130, segments: [{ start: 30, end: 70 }, { start: 150, end: 190 }, { start: 270, end: 310 }], stroke: "hsl(28 100% 55%)", width: 2, opacity: 0.4, direction: 1, speed: 55 },
+      { radius: 140, segments: [{ start: 0, end: 60 }, { start: 72, end: 132 }, { start: 144, end: 204 }, { start: 216, end: 276 }, { start: 288, end: 348 }], stroke: "hsl(28 100% 55%)", width: 4, opacity: 0.85, direction: -1, speed: 22 },
+      { radius: 135, segments: [{ start: 10, end: 65 }, { start: 100, end: 155 }, { start: 190, end: 245 }, { start: 280, end: 335 }], stroke: "hsl(270 80% 55%)", width: 3, opacity: 0.65, direction: 1, speed: 30 },
+      { radius: 130, segments: [{ start: 0, end: 50 }, { start: 120, end: 170 }, { start: 240, end: 290 }], stroke: "hsl(42 100% 60%)", width: 2.5, opacity: 0.55, direction: -1, speed: 40 },
+      { radius: 125, segments: [{ start: 30, end: 70 }, { start: 150, end: 190 }, { start: 270, end: 310 }], stroke: "hsl(28 100% 55%)", width: 2, opacity: 0.4, direction: 1, speed: 55 },
     ],
     maxNotifs: 6,
     glowIntensity: 0.7,
@@ -139,7 +139,7 @@ const AnimatedLogo = ({ phase = 1, isAdmin = false, onPhasePreview }: AnimatedLo
       </div>
 
       {/* Logo container */}
-      <div className="relative flex items-center justify-center" style={{ width: 360, height: 360 }}>
+      <div className="relative flex items-center justify-center w-[300px] h-[300px] mx-auto">
         <AnimatePresence mode="wait">
           <motion.svg
             key={activePhase}
@@ -294,7 +294,7 @@ const AnimatedLogo = ({ phase = 1, isAdmin = false, onPhasePreview }: AnimatedLo
         {notifications.slice(0, cfg.maxNotifs).map((notif, i) => {
           const angle = (i * (360 / cfg.maxNotifs)) - 90;
           const rad = (angle * Math.PI) / 180;
-          const notifRadius = 185;
+          const notifRadius = 155;
           const x = Math.cos(rad) * notifRadius;
           const y = Math.sin(rad) * notifRadius;
           const isVisible = visibleNotifs.includes(i);

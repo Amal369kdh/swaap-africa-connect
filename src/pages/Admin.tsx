@@ -3,12 +3,14 @@ import Header from "@/components/Header";
 import BottomNav from "@/components/BottomNav";
 import { supabase } from "@/integrations/supabase/client";
 import { useUser } from "@/contexts/UserContext";
+import { usePlatform } from "@/contexts/PlatformContext";
 import { getMaskForPlan } from "@/lib/masks";
 import MaskAvatar from "@/components/MaskAvatar";
+import AdminPhaseManager from "@/components/AdminPhaseManager";
 import {
   Users, TrendingUp, Repeat, AlertTriangle, Shield, Trash2,
   Ban, ChevronDown, ChevronUp, BarChart3, Eye, MapPin, Search,
-  RefreshCw, Loader2
+  RefreshCw, Loader2, Settings
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
@@ -37,10 +39,11 @@ interface AnnonceRow {
   profiles?: { display_name: string; plan: string } | null;
 }
 
-type Tab = "kpis" | "users" | "annonces" | "alerts";
+type Tab = "kpis" | "users" | "annonces" | "alerts" | "phases";
 
 const Admin = () => {
   const { user } = useUser();
+  const { config } = usePlatform();
   const [tab, setTab] = useState<Tab>("kpis");
   const [profiles, setProfiles] = useState<ProfileRow[]>([]);
   const [annonces, setAnnonces] = useState<AnnonceRow[]>([]);
@@ -79,8 +82,15 @@ const Admin = () => {
   });
   const topCountries = Object.entries(countryCounts).sort((a, b) => b[1] - a[1]).slice(0, 5);
 
-  // Fraud alerts (mock detection: users with suspiciously high credits or level)
+  // Fraud alerts
   const suspiciousProfiles = profiles.filter((p) => p.credits > 200 || p.level > 50);
+
+  // KPI threshold alerts
+  const kpiAlerts: { label: string; value: number; threshold: number; exceeded: boolean }[] = config ? [
+    { label: "Utilisateurs", value: totalUsers, threshold: config.alert_threshold_users, exceeded: totalUsers >= config.alert_threshold_users },
+    { label: "Crédits en circ.", value: totalCredits, threshold: config.alert_threshold_credits, exceeded: totalCredits >= config.alert_threshold_credits },
+    { label: "Annonces actives", value: activeAnnonces, threshold: config.alert_threshold_annonces, exceeded: activeAnnonces >= config.alert_threshold_annonces },
+  ] : [];
 
   // Filtered data
   const filteredUsers = profiles.filter((p) =>
@@ -112,6 +122,7 @@ const Admin = () => {
 
   const tabs = [
     { id: "kpis" as Tab, label: "KPIs", icon: BarChart3 },
+    { id: "phases" as Tab, label: "Phases", icon: Settings },
     { id: "users" as Tab, label: "Utilisateurs", icon: Users },
     { id: "annonces" as Tab, label: "Annonces", icon: Repeat },
     { id: "alerts" as Tab, label: "Alertes", icon: AlertTriangle },
@@ -218,6 +229,9 @@ const Admin = () => {
             </div>
           </div>
         )}
+
+        {/* Phases Tab */}
+        {tab === "phases" && <AdminPhaseManager />}
 
         {/* Users Tab */}
         {tab === "users" && (
@@ -329,6 +343,24 @@ const Admin = () => {
         {/* Alerts Tab */}
         {tab === "alerts" && (
           <div className="space-y-4 animate-fade-in">
+            {/* KPI Threshold Alerts */}
+            {kpiAlerts.some((a) => a.exceeded) && (
+              <div className="rounded-lg bg-swaap-gold/10 border border-swaap-gold/30 p-4">
+                <h3 className="font-display text-sm font-bold mb-2 flex items-center gap-2 text-swaap-gold">
+                  <TrendingUp className="h-4 w-4" />
+                  Seuils KPI atteints
+                </h3>
+                <div className="space-y-2">
+                  {kpiAlerts.filter((a) => a.exceeded).map((a) => (
+                    <div key={a.label} className="flex items-center justify-between text-xs rounded-md bg-swaap-gold/5 p-2 border border-swaap-gold/20">
+                      <span className="font-medium">{a.label}</span>
+                      <span className="font-display font-bold text-swaap-gold">{a.value} / {a.threshold}</span>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-[10px] text-muted-foreground mt-2">Ajustez les seuils dans l'onglet Phases</p>
+              </div>
+            )}
             <div className="rounded-lg bg-card border border-border p-4">
               <h3 className="font-display text-sm font-bold mb-1 flex items-center gap-2">
                 <AlertTriangle className="h-4 w-4 text-swaap-gold" />

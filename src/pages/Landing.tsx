@@ -129,7 +129,7 @@ const Landing = () => {
           </div>
 
           <div className="space-y-1.5 mb-3">
-            {ligueCountries.map((country) => (
+            {ligueCountries.slice(0, 3).map((country) => (
               <div
                 key={country.name}
                 className={`flex items-center justify-between rounded-lg px-3 py-2 transition-colors ${
@@ -156,6 +156,39 @@ const Landing = () => {
                 </div>
               </div>
             ))}
+
+            {/* Blurred remaining ranks */}
+            <div className="relative">
+              <div className="space-y-1.5 blur-[6px] select-none pointer-events-none">
+                {ligueCountries.slice(3).map((country) => (
+                  <div
+                    key={country.name}
+                    className="flex items-center justify-between rounded-lg px-3 py-2 bg-muted/30"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <span className="font-display text-xs font-bold w-4 text-center text-muted-foreground">{country.rank}</span>
+                      <span className="text-base">{country.flag}</span>
+                      <span className="text-xs font-medium">{country.name}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Flame className="h-3 w-3 text-muted-foreground" />
+                      <span className="font-display text-xs font-bold text-muted-foreground">
+                        {country.score.toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Link
+                  to="/auth"
+                  className="rounded-full bg-card/90 border border-primary/30 px-4 py-1.5 text-[10px] font-semibold text-primary backdrop-blur-sm hover:bg-card transition-colors flex items-center gap-1.5"
+                >
+                  <Eye className="h-3 w-3" />
+                  Inscris-toi pour voir le classement complet
+                </Link>
+              </div>
+            </div>
           </div>
 
           <div className="text-center">

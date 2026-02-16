@@ -9,7 +9,7 @@ const badges = [
 
 const ProgressionUser = () => {
   return (
-    <div className="rounded-lg bg-card p-4 gradient-border">
+    <div className="rounded-lg bg-card p-4 gradient-border relative african-motif-corner african-diamond african-zigzag-top overflow-hidden">
       <div className="flex items-center gap-2 mb-4">
         <Award className="h-5 w-5 text-swaap-gold" />
         <h2 className="font-display text-sm font-bold tracking-wide">Votre Progression</h2>

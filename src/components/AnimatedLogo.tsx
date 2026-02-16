@@ -65,17 +65,17 @@ const phaseConfig = {
     borderRings: 2,
   },
   3: {
-    // Phase 3: Logo full, bright, STATIC
-    logoRadius: 110,
+    // Phase 3: Logo full, bright, STATIC — much bigger
+    logoRadius: 130,
     logoOpacity: 1,
     logoRotateSpeed: 0,
     logoRotates: false,
     clipReveal: 1,
     rings: [
-      { radius: 142, segments: [{ start: 0, end: 60 }, { start: 72, end: 132 }, { start: 144, end: 204 }, { start: 216, end: 276 }, { start: 288, end: 348 }], stroke: "hsl(28 100% 55%)", width: 4, opacity: 0.85, direction: -1, speed: 22 },
-      { radius: 128, segments: [{ start: 10, end: 65 }, { start: 100, end: 155 }, { start: 190, end: 245 }, { start: 280, end: 335 }], stroke: "hsl(270 80% 55%)", width: 3, opacity: 0.65, direction: 1, speed: 30 },
-      { radius: 112, segments: [{ start: 0, end: 50 }, { start: 120, end: 170 }, { start: 240, end: 290 }], stroke: "hsl(42 100% 60%)", width: 2.5, opacity: 0.55, direction: -1, speed: 40 },
-      { radius: 100, segments: [{ start: 30, end: 70 }, { start: 150, end: 190 }, { start: 270, end: 310 }], stroke: "hsl(28 100% 55%)", width: 2, opacity: 0.4, direction: 1, speed: 55 },
+      { radius: 148, segments: [{ start: 0, end: 60 }, { start: 72, end: 132 }, { start: 144, end: 204 }, { start: 216, end: 276 }, { start: 288, end: 348 }], stroke: "hsl(28 100% 55%)", width: 4, opacity: 0.85, direction: -1, speed: 22 },
+      { radius: 140, segments: [{ start: 10, end: 65 }, { start: 100, end: 155 }, { start: 190, end: 245 }, { start: 280, end: 335 }], stroke: "hsl(270 80% 55%)", width: 3, opacity: 0.65, direction: 1, speed: 30 },
+      { radius: 135, segments: [{ start: 0, end: 50 }, { start: 120, end: 170 }, { start: 240, end: 290 }], stroke: "hsl(42 100% 60%)", width: 2.5, opacity: 0.55, direction: -1, speed: 40 },
+      { radius: 132, segments: [{ start: 30, end: 70 }, { start: 150, end: 190 }, { start: 270, end: 310 }], stroke: "hsl(28 100% 55%)", width: 2, opacity: 0.4, direction: 1, speed: 55 },
     ],
     maxNotifs: 6,
     glowIntensity: 0.7,

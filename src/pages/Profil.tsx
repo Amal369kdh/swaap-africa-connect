@@ -14,14 +14,14 @@ const stats = [
 ];
 
 const Profil = () => {
-  const { plan, credits, logout } = useUser();
+  const { plan, credits, logout, userName, xp, level } = useUser();
   const navigate = useNavigate();
   const mask = getMaskForPlan(plan);
 
   const planLabel = plan === "premium" ? "Premium · 1000 FCFA" : plan === "standard" ? "Standard · 600 FCFA" : "Gratuit";
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     navigate("/");
   };
 
@@ -34,11 +34,11 @@ const Profil = () => {
           <div className="mx-auto mb-3">
             <MaskAvatar mask={mask} size="lg" showLabel />
           </div>
-          <h1 className="font-display text-xl font-bold mt-2">Samba Diallo</h1>
+          <h1 className="font-display text-xl font-bold mt-2">{userName || "Utilisateur"}</h1>
           <p className="text-sm text-muted-foreground">Abidjan, Côte d'Ivoire 🇨🇮</p>
           <div className={`mt-2 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${mask.bgClass} ${mask.color} border ${mask.borderClass}`}>
             <Award className="h-3.5 w-3.5" />
-            {mask.name} · Niv. 12
+            {mask.name} · Niv. {level}
           </div>
         </section>
 
@@ -82,13 +82,13 @@ const Profil = () => {
         {/* XP Progress */}
         <div className="rounded-lg bg-card p-4 gradient-border animate-fade-in" style={{ animationDelay: "0.15s", opacity: 0 }}>
           <div className="flex justify-between text-xs text-muted-foreground mb-1.5">
-            <span>Niv. 12</span>
-            <span>Niv. 13</span>
+            <span>Niv. {level}</span>
+            <span>Niv. {level + 1}</span>
           </div>
           <div className="h-2.5 rounded-full bg-muted overflow-hidden">
-            <div className="h-full rounded-full bg-gradient-to-r from-primary to-secondary" style={{ width: "65%" }} />
+            <div className="h-full rounded-full bg-gradient-to-r from-primary to-secondary" style={{ width: `${Math.min(100, (xp % 1000) / 10)}%` }} />
           </div>
-          <p className="mt-1.5 text-xs text-muted-foreground text-right">650 / 1 000 XP</p>
+          <p className="mt-1.5 text-xs text-muted-foreground text-right">{xp % 1000} / 1 000 XP</p>
         </div>
 
         {/* Stats grid */}
